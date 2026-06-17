@@ -1,0 +1,539 @@
+React Fundamentals — Components & JSX (Deep Dive)
+1. Why React?
+
+React is a JavaScript library developed by Meta Platforms for building user interfaces, especially Single Page Applications (SPAs).
+
+Problems Before React
+
+Traditional JavaScript applications often suffer from:
+
+Complex DOM manipulation
+Repeated code
+Difficult state management
+Poor scalability
+Performance issues with large applications
+
+Example:
+
+const button = document.getElementById("btn");
+
+button.addEventListener("click", () => {
+  document.getElementById("title").innerText = "Updated";
+});
+
+As applications grow, managing thousands of DOM updates becomes difficult.
+
+React solves this through:
+
+Components
+Virtual DOM
+Declarative UI
+Unidirectional Data Flow
+2. Component Model
+What is a Component?
+
+A component is a reusable UI building block.
+
+Think of a website like LEGO blocks:
+
+App
+├── Navbar
+├── Sidebar
+├── ProductList
+│   ├── ProductCard
+│   ├── ProductCard
+│   └── ProductCard
+└── Footer
+
+Each block is a component.
+
+Example:
+
+function Welcome() {
+  return <h1>Hello React</h1>;
+}
+
+Usage:
+
+<Welcome />
+
+Output:
+
+<h1>Hello React</h1>
+Benefits of Components
+Reusability
+<ProductCard />
+<ProductCard />
+<ProductCard />
+
+Write once, use many times.
+
+Maintainability
+
+Update one component:
+
+function Button() {
+  return <button>Buy Now</button>;
+}
+
+Everywhere it updates automatically.
+
+Separation of Concerns
+
+Each component handles its own:
+
+UI
+Logic
+Styling
+3. Virtual DOM
+What is DOM?
+
+DOM (Document Object Model):
+
+<body>
+  <h1>Hello</h1>
+</body>
+
+Browser converts HTML into a tree.
+
+Body
+ └── h1
+      └── Hello
+
+Updating real DOM is expensive.
+
+What is Virtual DOM?
+
+React creates a lightweight copy of the DOM in memory.
+
+Real DOM
+     ↑
+ Virtual DOM
+
+When state changes:
+
+Create new Virtual DOM
+Compare with old Virtual DOM (Diffing)
+Find changes
+Update only changed elements
+Example
+
+Before:
+
+<h1>Hello</h1>
+
+After:
+
+<h1>Hello React</h1>
+
+React updates only text content instead of rebuilding entire page.
+
+Benefits
+Faster Rendering
+
+Only necessary updates.
+
+Better Performance
+
+Less browser work.
+
+Efficient UI Updates
+
+Large applications remain responsive.
+
+4. Unidirectional Data Flow
+
+Data flows in one direction:
+
+Parent
+  ↓
+Child
+  ↓
+GrandChild
+
+Example:
+
+function App() {
+  return <User name="Jabir" />;
+}
+
+function User(props) {
+  return <h1>{props.name}</h1>;
+}
+
+Flow:
+
+App
+ ↓
+User
+
+Data always moves:
+
+Parent → Child
+
+Never:
+
+Child → Parent
+
+This makes applications predictable.
+
+5. Create React App Using Vite
+Why Vite?
+
+Vite is faster than older tools like Create React App.
+
+Advantages:
+
+Instant startup
+Fast hot reload
+Smaller bundles
+Better developer experience
+Installation
+Step 1
+npm create vite@latest
+Step 2
+
+Project name:
+
+my-react-app
+Step 3
+
+Choose:
+
+React
+Step 4
+
+Choose:
+
+JavaScript
+Install Dependencies
+cd my-react-app
+
+npm install
+Run Project
+npm run dev
+
+Output:
+
+http://localhost:5173
+Folder Structure
+src/
+├── assets/
+├── App.jsx
+├── main.jsx
+└── components/
+6. JSX (JavaScript XML)
+
+JSX allows HTML-like syntax inside JavaScript.
+
+Example:
+
+const element = <h1>Hello React</h1>;
+
+React converts it into:
+
+React.createElement(
+  "h1",
+  null,
+  "Hello React"
+);
+JSX Rules
+Rule 1: Single Parent Element
+
+Wrong:
+
+return (
+  <h1>Hello</h1>
+  <p>World</p>
+);
+
+Correct:
+
+return (
+  <div>
+    <h1>Hello</h1>
+    <p>World</p>
+  </div>
+);
+
+Or:
+
+return (
+  <>
+    <h1>Hello</h1>
+    <p>World</p>
+  </>
+);
+Rule 2: Close Tags
+
+Wrong:
+
+<img src="image.jpg">
+
+Correct:
+
+<img src="image.jpg" />
+Rule 3: class → className
+
+HTML:
+
+<div class="box"></div>
+
+JSX:
+
+<div className="box"></div>
+Rule 4: JavaScript Inside {}
+const name = "Jabir";
+
+<h1>{name}</h1>
+
+Output:
+
+<h1>Jabir</h1>
+7. Functional Components
+
+Modern React primarily uses Functional Components.
+
+Example:
+
+function Greeting() {
+  return <h1>Hello React</h1>;
+}
+
+Arrow Function:
+
+const Greeting = () => {
+  return <h1>Hello React</h1>;
+};
+
+Short Form:
+
+const Greeting = () => <h1>Hello React</h1>;
+
+Usage:
+
+<Greeting />
+8. Props Passing
+
+Props = Properties
+
+Used to send data from parent to child.
+
+Parent:
+
+<User
+  name="Jabir"
+  age={25}
+/>
+
+Child:
+
+function User(props) {
+  return (
+    <>
+      <h2>{props.name}</h2>
+      <p>{props.age}</p>
+    </>
+  );
+}
+
+Output:
+
+Jabir
+25
+Destructuring Props
+
+Better approach:
+
+function User({ name, age }) {
+  return (
+    <>
+      <h2>{name}</h2>
+      <p>{age}</p>
+    </>
+  );
+}
+9. Component Composition
+
+Building components using smaller components.
+
+Example:
+
+function Header() {
+  return <h1>Store</h1>;
+}
+
+function ProductList() {
+  return <p>Products</p>;
+}
+
+function Footer() {
+  return <h3>Footer</h3>;
+}
+
+Compose:
+
+function App() {
+  return (
+    <>
+      <Header />
+      <ProductList />
+      <Footer />
+    </>
+  );
+}
+
+Benefits:
+
+Reusable
+Cleaner code
+Easier testing
+10. Children Prop
+
+React automatically passes nested content through children.
+
+Parent:
+
+<Card>
+  <h2>Laptop</h2>
+</Card>
+
+Child:
+
+function Card({ children }) {
+  return (
+    <div className="card">
+      {children}
+    </div>
+  );
+}
+
+Output:
+
+<div class="card">
+  <h2>Laptop</h2>
+</div>
+11. Conditional Rendering
+
+Render UI based on conditions.
+
+Using &&
+const isAdmin = true;
+
+return (
+  <>
+    {isAdmin && <h1>Admin Panel</h1>}
+  </>
+);
+
+Only renders if true.
+
+Using Ternary
+const loggedIn = true;
+
+return (
+  <>
+    {loggedIn
+      ? <h1>Dashboard</h1>
+      : <h1>Login</h1>}
+  </>
+);
+Early Return
+function User({ loggedIn }) {
+  if (!loggedIn) {
+    return <h1>Please Login</h1>;
+  }
+
+  return <h1>Welcome</h1>;
+}
+
+Cleaner for complex logic.
+
+12. Rendering Lists with map()
+
+Most common React pattern.
+
+Data:
+
+const products = [
+  { id: 1, name: "Laptop" },
+  { id: 2, name: "Phone" },
+  { id: 3, name: "Tablet" }
+];
+
+Render:
+
+<ul>
+  {products.map(product => (
+    <li key={product.id}>
+      {product.name}
+    </li>
+  ))}
+</ul>
+
+Output:
+
+Laptop
+Phone
+Tablet
+Why Key is Important?
+
+Wrong:
+
+<li>{product.name}</li>
+
+Correct:
+
+<li key={product.id}>
+
+Key helps React:
+
+Identify items
+Track changes
+Improve performance
+
+Use:
+
+key={product.id}
+
+Avoid:
+
+key={index}
+
+unless list never changes.
+
+13. React DevTools
+
+Browser extension for debugging React applications.
+
+Available for:
+
+Chrome
+Firefox
+Edge
+
+Features:
+
+Components Tab
+
+View component tree:
+
+App
+ ├── Header
+ ├── ProductGrid
+ └── Footer
+Props Inspection
+
+See:
+
+{
+  name: "Laptop",
+  price: 1000
+}
+State Inspection
+
+Check current state values.
+
+Performance Profiling
+
+Find slow renders.
