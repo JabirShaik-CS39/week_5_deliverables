@@ -1,0 +1,534 @@
+React Hooks — State & Effects (Deep Explanation)
+
+React Hooks were introduced in React 16.8 to allow functional components to manage state and lifecycle features without using class components.
+
+Before Hooks:
+
+class App extends React.Component {
+  state = {
+    count: 0
+  };
+
+  render() {
+    return <h1>{this.state.count}</h1>;
+  }
+}
+
+With Hooks:
+
+import { useState } from "react";
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return <h1>{count}</h1>;
+}
+
+Hooks make React applications cleaner, reusable, and easier to maintain.
+
+1. useState Hook
+What is State?
+
+State is data that belongs to a component and can change over time.
+
+When state changes:
+
+React updates the state.
+Component re-renders.
+UI updates automatically.
+Syntax
+const [state, setState] = useState(initialValue);
+
+Example:
+
+const [count, setCount] = useState(0);
+Variable	Purpose
+count	Current value
+setCount	Function to update value
+0	Initial value
+State with Primitive Values
+
+Primitives:
+
+String
+Number
+Boolean
+
+Example:
+
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <h1>{count}</h1>
+
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </>
+  );
+}
+
+Output:
+
+0
+1
+2
+3
+...
+State with Strings
+const [name, setName] = useState("Jabir");
+
+return (
+  <>
+    <h2>{name}</h2>
+
+    <button onClick={() => setName("Shaik")}>
+      Change
+    </button>
+  </>
+);
+State with Boolean
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+<button onClick={() => setIsLoggedIn(!isLoggedIn)}>
+  Toggle
+</button>
+State with Objects
+
+Example User Profile:
+
+const [user, setUser] = useState({
+  name: "Jabir",
+  age: 22
+});
+Wrong Way
+setUser({
+  age: 23
+});
+
+Output:
+
+{
+  age: 23
+}
+
+name is lost.
+
+Correct Way (Spread Operator)
+setUser({
+  ...user,
+  age: 23
+});
+
+Output:
+
+{
+  name: "Jabir",
+  age: 23
+}
+State with Arrays
+
+Example:
+
+const [fruits, setFruits] = useState([
+  "Apple",
+  "Orange"
+]);
+Add Item
+setFruits([
+  ...fruits,
+  "Banana"
+]);
+
+Result:
+
+[
+ "Apple",
+ "Orange",
+ "Banana"
+]
+Remove Item
+setFruits(
+  fruits.filter(
+    fruit => fruit !== "Orange"
+  )
+);
+
+Result:
+
+[
+ "Apple",
+ "Banana"
+]
+Immutable State Updates
+What is Immutable?
+
+Immutable means:
+
+❌ Don't modify original state
+
+user.age = 30;
+
+❌
+
+fruits.push("Banana");
+
+React may not detect changes properly.
+
+Always Create New State
+Objects
+setUser({
+  ...user,
+  age: 30
+});
+Arrays
+setFruits([
+  ...fruits,
+  "Banana"
+]);
+Why Spread Operator?
+const updatedUser = {
+  ...user,
+  age: 25
+};
+
+Copies all existing properties and updates specified fields.
+
+Re-render Triggers
+
+React re-renders when:
+
+State Changes
+setCount(count + 1);
+
+✓ Re-render
+
+Props Change
+
+Parent:
+
+<Child value={count}/>
+
+If count changes:
+
+✓ Child re-renders
+
+Context Changes
+
+Using Context API:
+
+const theme = useContext(ThemeContext);
+
+Theme update:
+
+✓ Re-render
+
+Does NOT Trigger Re-render
+let count = 0;
+
+count++;
+
+React doesn't track normal variables.
+
+useEffect Hook
+What is useEffect?
+
+Handles side effects.
+
+Side Effects:
+
+API calls
+Timers
+Local Storage
+Event listeners
+WebSocket connections
+Syntax
+useEffect(() => {
+  // side effect code
+}, []);
+Effect Runs After Render
+useEffect(() => {
+  console.log("Component Rendered");
+});
+
+Runs after every render.
+
+Dependency Array
+
+Most important concept.
+
+Case 1: No Dependency Array
+useEffect(() => {
+  console.log("Runs Every Render");
+});
+
+Runs:
+
+Initial Render
+State Update
+State Update
+State Update
+...
+Case 2: Empty Dependency Array
+useEffect(() => {
+  console.log("Runs Once");
+}, []);
+
+Runs only on component mount.
+
+Equivalent to:
+
+componentDidMount()
+Case 3: Specific Dependency
+useEffect(() => {
+  console.log("Count Changed");
+}, [count]);
+
+Runs only when count changes.
+
+Example
+const [count, setCount] = useState(0);
+
+useEffect(() => {
+  document.title = `Count: ${count}`;
+}, [count]);
+
+Browser tab updates whenever count changes.
+
+Cleanup Function
+
+Used to clean resources.
+
+Syntax:
+
+useEffect(() => {
+
+  return () => {
+    // cleanup
+  };
+
+}, []);
+Why Cleanup?
+
+Avoid:
+
+Memory leaks
+Duplicate listeners
+Multiple timers
+Timer Cleanup Example
+useEffect(() => {
+  const timer = setInterval(() => {
+    console.log("Running");
+  }, 1000);
+
+  return () => {
+    clearInterval(timer);
+  };
+
+}, []);
+
+Without cleanup:
+
+Multiple intervals keep running.
+
+Event Listener Cleanup
+useEffect(() => {
+
+  const handleResize = () => {
+    console.log(window.innerWidth);
+  };
+
+  window.addEventListener(
+    "resize",
+    handleResize
+  );
+
+  return () => {
+    window.removeEventListener(
+      "resize",
+      handleResize
+    );
+  };
+
+}, []);
+Fetch Data on Mount from FastAPI
+
+Backend:
+
+@app.get("/users")
+def get_users():
+    return [
+        {"id":1,"name":"Jabir"},
+        {"id":2,"name":"John"}
+    ]
+
+React:
+
+import { useState, useEffect } from "react";
+
+function Users() {
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+
+    fetch("http://localhost:8000/users")
+      .then(res => res.json())
+      .then(data => setUsers(data));
+
+  }, []);
+
+  return (
+    <>
+      {users.map(user => (
+        <p key={user.id}>
+          {user.name}
+        </p>
+      ))}
+    </>
+  );
+}
+
+Flow:
+
+Component Mounted
+      ↓
+useEffect Runs
+      ↓
+API Call
+      ↓
+Data Received
+      ↓
+State Updated
+      ↓
+Re-render
+      ↓
+Display Data
+Async/Await Version
+useEffect(() => {
+
+  const fetchUsers = async () => {
+    const response =
+      await fetch(
+        "http://localhost:8000/users"
+      );
+
+    const data =
+      await response.json();
+
+    setUsers(data);
+  };
+
+  fetchUsers();
+
+}, []);
+useRef Hook
+
+Stores mutable values without causing re-renders.
+
+Syntax:
+
+const ref = useRef(initialValue);
+DOM Access Example
+import { useRef } from "react";
+
+function App() {
+
+  const inputRef = useRef();
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputRef} />
+
+      <button onClick={focusInput}>
+        Focus
+      </button>
+    </>
+  );
+}
+Persistent Value Example
+const renderCount = useRef(0);
+
+renderCount.current++;
+
+Value persists across renders.
+
+Does not trigger re-render.
+
+useState vs useRef
+Feature	useState	useRef
+Re-render	Yes	No
+Store data	Yes	Yes
+DOM Access	No	Yes
+Mutable	No	Yes
+Controlled Inputs
+
+React controls input value.
+
+const [name, setName] = useState("");
+
+<input
+  value={name}
+  onChange={(e) =>
+    setName(e.target.value)
+  }
+/>
+
+Benefits:
+
+Validation
+Dynamic UI
+Easy form handling
+Uncontrolled Inputs
+
+DOM controls input.
+
+const inputRef = useRef();
+
+<input ref={inputRef}/>
+
+Get value:
+
+inputRef.current.value
+Controlled vs Uncontrolled
+Controlled	Uncontrolled
+React controls value	DOM controls value
+useState required	useRef required
+Easy validation	Less code
+Recommended	Rare cases
+Event Handling
+
+React events use camelCase.
+
+onClick
+<button
+  onClick={() => alert("Clicked")}
+>
+  Click
+</button>
+onChange
+<input
+  onChange={(e) =>
+    console.log(e.target.value)
+  }
+/>
+onSubmit
+function handleSubmit(e) {
+  e.preventDefault();
+
+  console.log("Submitted");
+}
+
+<form onSubmit={handleSubmit}>
+  <button type="submit">
+    Save
+  </button>
+</form>
