@@ -7,14 +7,13 @@ Problems Before React
 
 Traditional JavaScript applications often suffer from:
 
-Complex DOM manipulation
-Repeated code
-Difficult state management
-Poor scalability
-Performance issues with large applications
+--> Complex DOM manipulation
+--> Repeated code
+--> Difficult state management
+--> Poor scalability
+--> Performance issues with large applications
 
 Example:
-
 const button = document.getElementById("btn");
 
 button.addEventListener("click", () => {
