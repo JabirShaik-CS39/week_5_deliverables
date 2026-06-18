@@ -1,0 +1,587 @@
+React Router v6 & API Integration – Detailed Notes
+1. Introduction to React Router v6
+
+React Router is the standard routing library used in React applications. It allows developers to build Single Page Applications (SPAs) where navigation between pages occurs without reloading the browser.
+
+Why Routing is Needed
+
+Without routing:
+
+Every page requires a separate HTML file.
+Browser reloads on every navigation.
+Poor user experience.
+
+With React Router:
+
+Navigation is handled inside React.
+Only required components are rendered.
+Faster and smoother user experience.
+2. React Router v6 Architecture
+
+A React application generally contains:
+
+src/
+│
+├── pages/
+│   ├── Home.jsx
+│   ├── Products.jsx
+│   ├── ProductDetails.jsx
+│   └── Login.jsx
+│
+├── layouts/
+│   └── MainLayout.jsx
+│
+├── routes/
+│   └── AppRouter.jsx
+│
+└── App.jsx
+3. createBrowserRouter
+What is createBrowserRouter?
+
+createBrowserRouter() is the modern routing API introduced in React Router v6.4+.
+
+It creates a router instance using browser history.
+
+Syntax
+import { createBrowserRouter } from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />
+  }
+]);
+Example
+import { createBrowserRouter } from "react-router-dom";
+
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />
+  },
+  {
+    path: "/about",
+    element: <About />
+  }
+]);
+
+export default router;
+Using RouterProvider
+import ReactDOM from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import router from "./router";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <RouterProvider router={router} />
+);
+4. Route Component
+
+A Route defines which component should be rendered for a specific URL.
+
+Example
+{
+  path: "/products",
+  element: <Products />
+}
+
+When user visits:
+
+http://localhost:5173/products
+
+React renders:
+
+<Products />
+5. Link Component
+Purpose
+
+Used for navigation without reloading the page.
+
+Bad Practice
+<a href="/products">Products</a>
+
+Causes full page reload.
+
+Correct Practice
+import { Link } from "react-router-dom";
+
+<Link to="/products">Products</Link>
+
+Benefits:
+
+Faster navigation
+SPA behavior maintained
+No browser refresh
+6. NavLink Component
+
+NavLink is similar to Link but automatically knows whether the link is active.
+
+Example
+import { NavLink } from "react-router-dom";
+
+<NavLink to="/products">
+  Products
+</NavLink>
+Active Styling
+<NavLink
+  to="/products"
+  className={({ isActive }) =>
+    isActive ? "active-link" : ""
+  }
+>
+  Products
+</NavLink>
+
+CSS:
+
+.active-link {
+  color: red;
+  font-weight: bold;
+}
+7. useParams Hook
+
+Used to retrieve dynamic route parameters.
+
+Route Definition
+{
+  path: "/products/:id",
+  element: <ProductDetails />
+}
+URL Example
+/products/10
+
+ID becomes:
+
+10
+Access Parameter
+import { useParams } from "react-router-dom";
+
+function ProductDetails() {
+  const { id } = useParams();
+
+  return <h1>Product ID: {id}</h1>;
+}
+
+Output:
+
+Product ID: 10
+8. useNavigate Hook
+
+Used for programmatic navigation.
+
+Example
+
+Navigate after login:
+
+import { useNavigate } from "react-router-dom";
+
+function Login() {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/dashboard");
+  };
+}
+Navigate Back
+navigate(-1);
+
+Equivalent to browser back button.
+
+Replace Current Route
+navigate("/dashboard", {
+  replace: true
+});
+
+Prevents returning to previous page.
+
+9. Nested Routes
+
+Large applications need layouts and sub-pages.
+
+Example:
+
+Dashboard
+ ├── Profile
+ ├── Orders
+ └── Settings
+Route Structure
+{
+  path: "/dashboard",
+  element: <DashboardLayout />,
+  children: [
+    {
+      path: "profile",
+      element: <Profile />
+    },
+    {
+      path: "orders",
+      element: <Orders />
+    }
+  ]
+}
+10. Outlet Component
+
+Outlet is a placeholder where child routes render.
+
+Dashboard Layout
+import { Outlet } from "react-router-dom";
+
+function DashboardLayout() {
+  return (
+    <>
+      <h1>Dashboard</h1>
+
+      <Outlet />
+    </>
+  );
+}
+
+When user visits:
+
+/dashboard/profile
+
+Rendered:
+
+Dashboard
+ └── Profile Component
+11. Layout Routes
+
+Used for common UI.
+
+Example:
+
+Header
+Navbar
+Footer
+
+Displayed on every page.
+
+Layout Example
+function MainLayout() {
+  return (
+    <>
+      <Header />
+      <Navbar />
+
+      <Outlet />
+
+      <Footer />
+    </>
+  );
+}
+12. Axios Introduction
+
+Axios is a promise-based HTTP client used to communicate with backend APIs.
+
+Install:
+
+npm install axios
+13. Basic Axios GET Request
+import axios from "axios";
+
+const response = await axios.get(
+  "http://localhost:8000/products"
+);
+
+console.log(response.data);
+14. POST Request
+
+Create data.
+
+await axios.post(
+  "/products",
+  {
+    name: "Laptop",
+    price: 50000
+  }
+);
+15. PUT Request
+
+Update existing resource.
+
+await axios.put(
+  "/products/1",
+  {
+    name: "Updated Laptop"
+  }
+);
+16. DELETE Request
+
+Delete resource.
+
+await axios.delete("/products/1");
+17. Creating API Service Layer
+
+Instead of writing Axios everywhere, create one service file.
+
+Folder Structure
+src/
+│
+├── services/
+│   └── api.js
+api.js
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:8000/api",
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+
+export default api;
+Benefits of Service Layer
+Centralized Configuration
+
+Change API URL once.
+
+Reusable
+
+Use same instance everywhere.
+
+Cleaner Components
+
+Components focus on UI.
+
+Example Usage
+import api from "./services/api";
+
+const response = await api.get("/products");
+18. Axios Interceptors
+
+Interceptors execute before requests and after responses.
+
+Useful for:
+
+JWT Authentication
+Logging
+Error Handling
+Token Refresh
+Request Interceptor
+
+Attach JWT automatically.
+
+api.interceptors.request.use(
+  (config) => {
+    const token =
+      localStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization =
+        `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+How It Works
+
+Every request:
+
+api.get("/products");
+
+Automatically becomes:
+
+Authorization: Bearer eyJhbGc...
+Response Interceptor
+
+Handle unauthorized users.
+
+api.interceptors.response.use(
+  (response) => response,
+
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+
+      window.location.href = "/login";
+    }
+
+    return Promise.reject(error);
+  }
+);
+Why Use Response Interceptors?
+
+Instead of:
+
+if(status === 401)
+
+inside every component, handle it once globally.
+
+19. Loading State Pattern
+
+API calls take time.
+
+User must know data is loading.
+
+State Setup
+const [loading, setLoading] =
+  useState(false);
+API Call
+const fetchProducts = async () => {
+  try {
+    setLoading(true);
+
+    const res =
+      await api.get("/products");
+
+    setProducts(res.data);
+  }
+  finally {
+    setLoading(false);
+  }
+};
+UI
+if (loading)
+  return <h2>Loading...</h2>;
+Best Practice
+setLoading(true)
+
+try {
+   API Call
+}
+catch(error) {
+}
+finally {
+   setLoading(false)
+}
+20. Error State Pattern
+
+Always show meaningful errors.
+
+State
+const [error, setError] =
+  useState("");
+API Call
+try {
+  const res =
+    await api.get("/products");
+}
+catch(error) {
+  setError(
+    error.response?.data?.message ||
+    "Something went wrong"
+  );
+}
+UI
+{
+  error &&
+  <p>{error}</p>;
+}
+Combined Pattern
+const [loading, setLoading] =
+  useState(false);
+
+const [error, setError] =
+  useState("");
+
+try {
+  setLoading(true);
+  setError("");
+
+  const res =
+    await api.get("/products");
+
+  setProducts(res.data);
+}
+catch(error) {
+  setError("Failed to load products");
+}
+finally {
+  setLoading(false);
+}
+21. Authentication Flow
+
+Typical JWT authentication flow:
+
+User Login
+     ↓
+Backend validates credentials
+     ↓
+JWT Token Generated
+     ↓
+Frontend stores token
+     ↓
+Axios attaches token
+     ↓
+Protected APIs accessed
+22. Protected Route Component
+
+A protected route prevents unauthorized users from accessing private pages.
+
+Examples:
+
+Dashboard
+Orders
+Profile
+Admin Panel
+ProtectedRoute.jsx
+import {
+  Navigate
+} from "react-router-dom";
+
+function ProtectedRoute({
+  children
+}) {
+  const token =
+    localStorage.getItem("token");
+
+  if (!token) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+  }
+
+  return children;
+}
+
+export default ProtectedRoute;
+Using Protected Route
+{
+  path: "/dashboard",
+  element: (
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  )
+}
+Flow
+Logged In
+Token Exists
+     ↓
+Dashboard Opens
+Not Logged In
+Token Missing
+     ↓
+Redirect to Login
+23. Real Project Folder Structure
+src/
+│
+├── pages/
+│   ├── Home.jsx
+│   ├── Login.jsx
+│   ├── Products.jsx
+│   ├── ProductDetails.jsx
+│
+├── layouts/
+│   └── MainLayout.jsx
+│
+├── routes/
+│   ├── AppRouter.jsx
+│   └── ProtectedRoute.jsx
+│
+├── services/
+│   └── api.js
+│
+├── components/
+│   ├── Navbar.jsx
+│   ├── Loader.jsx
+│   └── ErrorMessage.jsx
+│
+└── App.jsx
