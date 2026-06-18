@@ -1,0 +1,89 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  background: #222;
+  padding: 15px;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 15px;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 20px;
+}
+
+div {
+  padding: 10px;
+}
+
+.dashboard-navbar {
+  background-color: #1f2937;
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-links {
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard-links a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+.dashboard-links a.active {
+  background-color: #2563eb;
+}
+
+.dashboard-content {
+  padding: 20px;
+}
+
+.profile-card,
+.order-card,
+.settings-card {
+  background: white;
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.order-card {
+  margin-bottom: 15px;
+}
+
+.settings-card {
+  display: flex;
+  gap: 15px;
+}
+
+.settings-card button {
+  padding: 10px 15px;
+  cursor: pointer;
+}

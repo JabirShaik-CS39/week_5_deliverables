@@ -4,13 +4,13 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    localStorage.setItem("token", "demo-token");
+    localStorage.setItem("isLoggedIn", "true");
     navigate("/dashboard");
   };
 
   return (
     <div>
-      <h1>Login Page</h1>
+      <h1>Login</h1>
 
       <button onClick={handleLogin}>
         Login
