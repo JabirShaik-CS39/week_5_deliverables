@@ -1,0 +1,573 @@
+Tailwind CSS & Shadcn/UI – Complete Study Notes
+1. Introduction to Tailwind CSS
+What is Tailwind CSS?
+
+Tailwind CSS is a utility-first CSS framework that provides small reusable utility classes to build modern user interfaces directly in HTML/JSX without writing custom CSS for every component.
+
+Unlike traditional CSS frameworks such as Bootstrap, Tailwind does not provide pre-built components. Instead, it provides utility classes that can be combined to create custom designs.
+
+Example
+
+Traditional CSS:
+
+<button class="btn">Login</button>
+.btn {
+  background: blue;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+Tailwind CSS:
+
+<button class="bg-blue-500 text-white px-5 py-2 rounded-lg">
+  Login
+</button>
+
+No separate CSS file is required.
+
+2. Utility-First Philosophy
+What is Utility-First?
+
+A utility class performs one specific job.
+
+Examples:
+
+text-center
+bg-red-500
+p-4
+mt-5
+rounded-lg
+flex
+grid
+
+Each class controls one CSS property.
+
+Example
+<div class="bg-white p-6 rounded-lg shadow-lg">
+  Product Card
+</div>
+
+Equivalent CSS:
+
+background-color: white;
+padding: 24px;
+border-radius: 12px;
+box-shadow: ...
+Advantages
+Faster Development
+
+No need to switch between CSS and HTML.
+
+Consistent Design
+
+Uses predefined spacing, colors, typography.
+
+Responsive Design
+
+Built-in responsive utilities.
+
+Smaller CSS Bundle
+
+Unused classes are removed during production build.
+
+Easy Maintenance
+
+No complex CSS architecture.
+
+Common Utility Categories
+Spacing
+p-4
+px-4
+py-2
+m-5
+mt-3
+mb-2
+Typography
+text-xl
+font-bold
+text-center
+uppercase
+Colors
+bg-blue-500
+text-white
+border-gray-300
+Sizing
+w-full
+h-screen
+max-w-md
+Borders
+border
+border-2
+rounded-lg
+Effects
+shadow-md
+shadow-lg
+opacity-50
+3. Responsive Design in Tailwind
+
+Tailwind uses mobile-first responsive design.
+
+Default styles apply to mobile.
+
+Larger screens override them.
+
+Breakpoints
+Prefix	Minimum Width
+sm	640px
+md	768px
+lg	1024px
+xl	1280px
+2xl	1536px
+Example
+<div class="text-sm md:text-lg lg:text-2xl">
+  Responsive Text
+</div>
+
+Meaning:
+
+Mobile → small text
+Tablet → large text
+Desktop → extra-large text
+Responsive Width
+<div class="w-full md:w-1/2 lg:w-1/3">
+  Content
+</div>
+Responsive Padding
+<div class="p-2 md:p-4 lg:p-8">
+  Box
+</div>
+4. Flexbox with Tailwind
+
+Flexbox is used for one-dimensional layouts.
+
+Enable Flexbox
+<div class="flex">
+  <div>1</div>
+  <div>2</div>
+</div>
+Horizontal Layout
+<div class="flex">
+  <div>Left</div>
+  <div>Right</div>
+</div>
+Center Items
+<div class="flex items-center justify-center h-screen">
+  Centered Content
+</div>
+Space Between
+<div class="flex justify-between">
+  <div>Logo</div>
+  <div>Menu</div>
+</div>
+Flex Direction
+flex-row
+flex-col
+
+Example:
+
+<div class="flex flex-col">
+5. Grid with Tailwind
+
+Grid is used for two-dimensional layouts.
+
+Basic Grid
+<div class="grid grid-cols-3 gap-4">
+
+Creates 3 columns.
+
+Responsive Grid
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+Result:
+
+Mobile → 1 column
+Tablet → 2 columns
+Desktop → 4 columns
+
+Perfect for e-commerce product pages.
+
+6. Dark Mode in Tailwind
+
+Dark mode allows users to switch between light and dark themes.
+
+Class Strategy
+
+In tailwind.config.js:
+
+module.exports = {
+  darkMode: "class",
+}
+Usage
+<div class="bg-white dark:bg-gray-900">
+
+Meaning:
+
+Light mode:
+
+background: white;
+
+Dark mode:
+
+background: gray-900;
+Text Example
+<p class="text-black dark:text-white">
+  Hello
+</p>
+Toggle Dark Mode
+document.documentElement.classList.toggle("dark");
+7. Tailwind Configuration
+
+File:
+
+tailwind.config.js
+
+Used to customize Tailwind.
+
+Custom Colors
+theme: {
+  extend: {
+    colors: {
+      primary: "#2563EB",
+      secondary: "#14B8A6",
+    }
+  }
+}
+
+Usage:
+
+bg-primary
+text-secondary
+Custom Fonts
+
+Install font first.
+
+Then:
+
+theme: {
+  extend: {
+    fontFamily: {
+      sans: ["Inter", "sans-serif"],
+    }
+  }
+}
+
+Usage:
+
+font-sans
+Custom Spacing
+extend: {
+  spacing: {
+    128: "32rem",
+  }
+}
+
+Usage:
+
+w-128
+8. Introduction to Shadcn/UI
+What is Shadcn/UI?
+
+Shadcn/UI is a modern component library built using:
+
+React
+Tailwind CSS
+Radix UI
+
+Unlike traditional libraries:
+
+Components are copied into your project.
+Full customization.
+No dependency lock-in.
+Benefits
+Accessible
+
+Built on Radix UI.
+
+Customizable
+
+Own the source code.
+
+Beautiful Design
+
+Production-ready components.
+
+Tailwind Integration
+
+Works naturally with Tailwind.
+
+9. Installing Shadcn/UI
+
+For Vite React Project
+
+Install Tailwind first.
+
+Then:
+
+npx shadcn@latest init
+
+Answer prompts.
+
+Install Components
+
+Button:
+
+npx shadcn@latest add button
+
+Input:
+
+npx shadcn@latest add input
+
+Card:
+
+npx shadcn@latest add card
+
+Dialog:
+
+npx shadcn@latest add dialog
+
+Table:
+
+npx shadcn@latest add table
+
+Select:
+
+npx shadcn@latest add select
+
+Toast:
+
+npx shadcn@latest add toast
+
+Dropdown Menu:
+
+npx shadcn@latest add dropdown-menu
+10. Button Component
+import { Button } from "@/components/ui/button";
+
+<Button>Submit</Button>
+
+Variants:
+
+<Button variant="outline">
+<Button variant="secondary">
+<Button variant="destructive">
+
+Sizes:
+
+<Button size="sm">
+<Button size="lg">
+11. Input Component
+import { Input } from "@/components/ui/input";
+
+<Input placeholder="Email" />
+12. Card Component
+<Card>
+  <CardHeader>
+    <CardTitle>Product</CardTitle>
+  </CardHeader>
+
+  <CardContent>
+    Details
+  </CardContent>
+</Card>
+
+Used for:
+
+Products
+User profiles
+Dashboards
+13. Dialog Component
+
+Modal popup window.
+
+<Dialog>
+  <DialogTrigger>
+    Open
+  </DialogTrigger>
+
+  <DialogContent>
+    Form Content
+  </DialogContent>
+</Dialog>
+
+Uses:
+
+Login forms
+Product editing
+Confirm delete
+14. Table Component
+<Table>
+  <TableHeader>
+  <TableRow>
+  <TableCell>
+</Table>
+
+Used in:
+
+Orders
+Users
+Admin dashboard
+15. Select Component
+
+Dropdown selector.
+
+<Select>
+  <SelectTrigger>
+    Choose Category
+  </SelectTrigger>
+</Select>
+16. Toast Notifications
+
+Shows temporary messages.
+
+Example:
+
+toast({
+  title: "Success",
+  description: "Product Added",
+});
+
+Uses:
+
+Login success
+Order placed
+Item deleted
+17. Dropdown Menu
+<DropdownMenu>
+
+Used for:
+
+Profile menu
+Settings menu
+User actions
+18. Responsive Navbar with Mobile Hamburger
+Desktop
+Logo     Home Products Cart Login
+Mobile
+Logo   ☰
+
+Menu opens when clicked.
+
+Tailwind Example
+<nav className="flex justify-between items-center p-4">
+
+Desktop Menu:
+
+<div className="hidden md:flex gap-6">
+
+Mobile Menu:
+
+<button className="md:hidden">
+  ☰
+</button>
+19. Product Grid
+
+E-commerce Product Layout
+
+Requirements
+Mobile
+
+1 Column
+
+grid-cols-1
+Tablet
+
+2 Columns
+
+md:grid-cols-2
+Desktop
+
+4 Columns
+
+lg:grid-cols-4
+Complete Grid
+<div className="
+grid
+grid-cols-1
+md:grid-cols-2
+lg:grid-cols-4
+gap-6
+">
+
+Perfect for:
+
+Products
+Blogs
+Services
+20. Modal Dialog with Form
+
+Example:
+
+<Dialog>
+  <DialogTrigger>
+    Add Product
+  </DialogTrigger>
+
+  <DialogContent>
+
+    <Input placeholder="Product Name" />
+
+    <Input placeholder="Price" />
+
+    <Button>
+      Save
+    </Button>
+
+  </DialogContent>
+</Dialog>
+
+Workflow:
+
+User clicks button
+Modal opens
+User fills form
+Save data
+Close modal
+21. Toast Notifications on Actions
+Add Product
+toast({
+  title: "Product Added"
+});
+Delete Product
+toast({
+  title: "Deleted",
+  description: "Product removed"
+});
+Login Success
+toast({
+  title: "Welcome Back"
+});
+Real-World E-Commerce Implementation
+Navbar
+Logo
+Search
+Categories
+Cart
+Login
+Product Grid
+1 column mobile
+2 columns tablet
+4 columns desktop
+Product Card
+Image
+Name
+Price
+Add to Cart
+Dialog
+
+Used for:
+
+Product details
+Edit product
+Checkout form
+Toasts
+
+Used for:
+
+Add to cart
+Remove from cart
+Payment success
+Order confirmation
+Dark Mode
+dark:bg-slate-900
+dark:text-white
